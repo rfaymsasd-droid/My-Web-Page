@@ -1,5 +1,20 @@
 body {
-  color: #fff06b;
+  color: #FFFFFF;
   background-color: #000000;
   font-family: 'Times New Roman', Times, serif;
+}
+
+.subtitle { 
+  color: White;
+  border: 2px solid black;
+  padding: 20px; 
+  margin: auto;
+  width: 300px;
+}
+
+
+#page-title { font-size: 48px; color: White; }
+#my-name {
+  color: White;
+  font-size: 80px;
 }
