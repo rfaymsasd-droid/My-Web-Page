@@ -1,21 +1,24 @@
 body {
-  color: #FFFFFF;
-  background-color: #000000;
+  color: #F2F4F1;
+  background-color: #0B0F0C;
   font-family: 'Times New Roman', Times, serif;
 }
 
-.subtitle { 
-  color: White;
-  border: 2px solid black;
-  padding: 20px; 
+.subtitle {
+  color: #B8C2B5;
+  border: 2px solid #355C3A;
+  padding: 20px;
   margin: auto;
   width: 300px;
 }
 
+#page-title {
+  font-size: 48px;
+  color: #6FAF5F;
+}
 
-#page-title { font-size: 48px; color: White; }
 #my-name {
-  color: White;
+  color: #F2F4F1;
   font-size: 80px;
 }
 
@@ -24,4 +27,5 @@ body {
   height: auto;
   margin: 10px;
   border-radius: 8px;
+  border: 2px solid #355C3A;
 }
