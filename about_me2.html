@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn more about me">
+  <title>About Me</title>
+
+  <style>
+    :root {
+      --bg: #09070c;
+      --panel: rgba(27, 12, 20, 0.76);
+      --text: #fff6f7;
+      --muted: #d0afb8;
+      --red: #ff4d6d;
+      --red-light: #ff8ca0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255, 42, 76, 0.2), transparent 30rem),
+        radial-gradient(circle at 85% 75%, rgba(255, 123, 66, 0.12), transparent 26rem),
+        var(--bg);
+    }
+
+    #shape-grid {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      opacity: 0.58;
+    }
+
+    main {
+      width: min(100% - 2rem, 900px);
+      margin: 0 auto;
+      padding: 3rem 0;
+    }
+
+    .back {
+      display: inline-flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      color: var(--text);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .back:hover {
+      color: var(--red-light);
+    }
+
+    .panel {
+      padding: clamp(1.5rem, 5vw, 4rem);
+      border: 1px solid rgba(255, 140, 160, 0.25);
+      border-radius: 28px;
+      background: var(--panel);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(14px);
+    }
+
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      color: var(--red-light);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 8vw, 5rem);
+      letter-spacing: -0.06em;
+    }
+
+    .intro {
+      max-width: 600px;
+      margin: 1rem 0 2rem;
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+    }
+
+    .fact {
+      padding: 1.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.045);
+      transition: transform 180ms ease, border-color 180ms ease;
+    }
+
+    .fact:hover {
+      transform: translateY(-4px);
+      border-color: var(--red);
+    }
+
+    .fact-label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .fact-value {
+      color: var(--text);
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .fact-value.red {
+      color: var(--red);
+    }
+
+    table {
+      width: 100%;
+      margin-top: 2rem;
+      border-collapse: collapse;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    th,
+    td {
+      padding: 1rem;
+      text-align: left;
+    }
+
+    th {
+      color: var(--red-light);
+      background: rgba(255, 77, 109, 0.11);
+    }
+
+    td {
+      color: var(--muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="shape-grid" aria-hidden="true"></canvas>
+
+  <main>
+    <a class="back" href="index.html">← Back to home</a>
+
+    <section class="panel">
+      <p class="eyebrow">A little about me</p>
+      <h1>About Me</h1>
+      <p class="intro">
+        I’m a home web developer who enjoys learning, building cool things, and exploring interesting ideas.
+      </p>
+
+      <div class="facts">
+        <article class="fact">
+          <span class="fact-label">Favorite color</span>
+          <span class="fact-value red">Red</span>
+        </article>
+
+        <article class="fact">
+          <span class="fact-label">Favorite game</span>
+          <span class="fact-value">Geometry Dash</span>
+        </article>
+
+        <article class="fact">
+          <span class="fact-label">Dream destination</span>
+          <span class="fact-value">Heliopolis</span>
+        </article>
+
+        <article class="fact">
+          <span class="fact-label">Favorite subject</span>
+          <span class="fact-value">Mathematics</span>
+        </article>
+
+        <article class="fact">
+          <span class="fact-label">I know some</span>
+          <span class="fact-value">Calculus</span>
+        </article>
+
+        <article class="fact">
+          <span class="fact-label">What I do</span>
+          <span class="fact-value">Web developer</span>
+        </article>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>My answer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Food</td>
+            <td>Burritos 🌯</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("shape-grid");
+    const ctx = canvas.getContext("2d");
+
+    const size = 46;
+    const speed = 0.28;
+    let offsetX = 0;
+    let offsetY = 0;
+    let mouseCell = null;
+    const trail = [];
+    const opacities = new Map();
+
+    function resizeCanvas() {
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * ratio;
+      canvas.height = window.innerHeight * ratio;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+
+    function cellKey(x, y) {
+      return `${x},${y}`;
+    }
+
+    function updateOpacities() {
+      const targets = new Map();
+
+      if (mouseCell) {
+        targets.set(cellKey(mouseCell.x, mouseCell.y), 1);
+      }
+
+      trail.forEach((cell, index) => {
+        const key = cellKey(cell.x, cell.y);
+        if (!targets.has(key)) {
+          targets.set(key, (trail.length - index) / (trail.length + 1));
+        }
+      });
+
+      targets.forEach((value, key) => {
+        if (!opacities.has(key)) opacities.set(key, 0);
+      });
+
+      opacities.forEach((opacity, key) => {
+        const target = targets.get(key) || 0;
+        const next = opacity + (target - opacity) * 0.14;
+
+        if (next < 0.01) opacities.delete(key);
+        else opacities.set(key, next);
+      });
+    }
+
+    function drawGrid() {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      const columns = Math.ceil(window.innerWidth / size) + 3;
+      const rows = Math.ceil(window.innerHeight / size) + 3;
+
+      for (let col = 0; col < columns; col++) {
+        for (let row = 0; row < rows; row++) {
+          const x = -size + col * size + offsetX;
+          const y = -size + row * size + offsetY;
+          const opacity = opacities.get(cellKey(col, row)) || 0;
+
+          if (opacity > 0) {
+            ctx.fillStyle = `rgba(255, 77, 109, ${opacity * 0.35})`;
+            ctx.fillRect(x, y, size, size);
+          }
+
+          ctx.strokeStyle = "rgba(255, 163, 180, 0.18)";
+          ctx.strokeRect(x, y, size, size);
+        }
+      }
+    }
+
+    function animate() {
+      offsetX -= speed;
+      offsetY -= speed;
+
+      if (offsetX <= -size) offsetX += size;
+      if (offsetY <= -size) offsetY += size;
+
+      updateOpacities();
+      drawGrid();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener("mousemove", (event) => {
+      const col = Math.floor((event.clientX - offsetX + size) / size);
+      const row = Math.floor((event.clientY - offsetY + size) / size);
+
+      if (!mouseCell || mouseCell.x !== col || mouseCell.y !== row) {
+        if (mouseCell) {
+          trail.unshift({ ...mouseCell });
+          if (trail.length > 10) trail.length = 10;
+        }
+        mouseCell = { x: col, y: row };
+      }
+    });
+
+    window.addEventListener("mouseleave", () => {
+      mouseCell = null;
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+
+    resizeCanvas();
+    animate();
+  </script>
+</body>
+</html>

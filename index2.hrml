@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Personal portfolio website">
+  <title>My Portfolio</title>
+
+  <style>
+    :root {
+      --bg: #070a12;
+      --panel: rgba(13, 19, 36, 0.72);
+      --text: #f4f7ff;
+      --muted: #a8b2cd;
+      --accent: #72f1b8;
+      --accent-2: #77a8ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(80, 113, 255, 0.18), transparent 32rem),
+        radial-gradient(circle at 85% 75%, rgba(55, 255, 182, 0.13), transparent 28rem),
+        var(--bg);
+    }
+
+    #shape-grid {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      opacity: 0.65;
+    }
+
+    main {
+      width: min(100% - 2rem, 900px);
+      margin: 0 auto;
+      padding: 6rem 0 3rem;
+    }
+
+    .hero {
+      padding: clamp(2rem, 7vw, 5rem);
+      border: 1px solid rgba(151, 177, 255, 0.22);
+      border-radius: 28px;
+      background: var(--panel);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+      backdrop-filter: blur(14px);
+    }
+
+    .eyebrow {
+      margin: 0 0 1rem;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 680px;
+      margin: 0;
+      font-size: clamp(2.7rem, 8vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.065em;
+    }
+
+    .intro {
+      max-width: 600px;
+      margin: 1.5rem 0 2rem;
+      color: var(--muted);
+      font-size: 1.12rem;
+      line-height: 1.7;
+    }
+
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .link-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 88px;
+      padding: 1.2rem;
+      border: 1px solid rgba(151, 177, 255, 0.2);
+      border-radius: 16px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.045);
+      text-decoration: none;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .link-card:hover,
+    .link-card:focus-visible {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+      background: rgba(114, 241, 184, 0.12);
+      outline: none;
+    }
+
+    .link-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: 0.25rem;
+    }
+
+    .arrow {
+      color: var(--accent);
+      font-size: 1.45rem;
+    }
+
+    .footer-note {
+      margin: 2rem 0 0;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .footer-note b {
+      color: var(--accent-2);
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="shape-grid" aria-hidden="true"></canvas>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">Hello, world</p>
+      <h1>Welcome to my portfolio.</h1>
+      <p class="intro">
+        Explore my pages, learn a little about me, and meet one of my favorite ants.
+      </p>
+
+      <nav class="links" aria-label="Portfolio pages">
+        <a class="link-card" href="example.html">
+          <div><strong>Example page</strong><span>See what I made</span></div>
+          <div class="arrow">↗</div>
+        </a>
+
+        <a class="link-card" href="about_me.html">
+          <div><strong>About me</strong><span>Get to know me</span></div>
+          <div class="arrow">↗</div>
+        </a>
+
+        <a class="link-card" href="acromyrmex_octospinosus.html">
+          <div><strong>Favorite ant</strong><span>Acromyrmex octospinosus</span></div>
+          <div class="arrow">↗</div>
+        </a>
+      </nav>
+    </section>
+
+    <p class="footer-note"><i>Look! It’s <b>Heliopolis!</b></i></p>
+  </main>
+
+  <script>
+    // Shape Grid background, adapted from React Bits for a plain HTML page.
+    const canvas = document.getElementById("shape-grid");
+    const ctx = canvas.getContext("2d");
+
+    const size = 46;
+    const speed = 0.28;
+    let offsetX = 0;
+    let offsetY = 0;
+    let mouseCell = null;
+    const trail = [];
+    const opacities = new Map();
+
+    function resizeCanvas() {
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * ratio;
+      canvas.height = window.innerHeight * ratio;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+
+    function cellKey(x, y) {
+      return `${x},${y}`;
+    }
+
+    function updateOpacities() {
+      const targets = new Map();
+
+      if (mouseCell) {
+        targets.set(cellKey(mouseCell.x, mouseCell.y), 1);
+      }
+
+      trail.forEach((cell, index) => {
+        const key = cellKey(cell.x, cell.y);
+        if (!targets.has(key)) {
+          targets.set(key, (trail.length - index) / (trail.length + 1));
+        }
+      });
+
+      targets.forEach((value, key) => {
+        if (!opacities.has(key)) opacities.set(key, 0);
+      });
+
+      opacities.forEach((opacity, key) => {
+        const target = targets.get(key) || 0;
+        const next = opacity + (target - opacity) * 0.14;
+
+        if (next < 0.01) opacities.delete(key);
+        else opacities.set(key, next);
+      });
+    }
+
+    function drawGrid() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const startX = -size;
+      const startY = -size;
+      const columns = Math.ceil(width / size) + 3;
+      const rows = Math.ceil(height / size) + 3;
+
+      for (let col = 0; col < columns; col++) {
+        for (let row = 0; row < rows; row++) {
+          const x = startX + col * size + offsetX;
+          const y = startY + row * size + offsetY;
+          const key = cellKey(col, row);
+          const opacity = opacities.get(key) || 0;
+
+          if (opacity > 0) {
+            ctx.fillStyle = `rgba(114, 241, 184, ${opacity * 0.33})`;
+            ctx.fillRect(x, y, size, size);
+          }
+
+          ctx.strokeStyle = "rgba(145, 171, 255, 0.18)";
+          ctx.lineWidth = 1;
+          ctx.strokeRect(x, y, size, size);
+        }
+      }
+    }
+
+    function animate() {
+      offsetX -= speed;
+      offsetY -= speed;
+
+      if (offsetX <= -size) offsetX += size;
+      if (offsetY <= -size) offsetY += size;
+
+      updateOpacities();
+      drawGrid();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener("mousemove", (event) => {
+      const col = Math.floor((event.clientX - offsetX + size) / size);
+      const row = Math.floor((event.clientY - offsetY + size) / size);
+
+      if (!mouseCell || mouseCell.x !== col || mouseCell.y !== row) {
+        if (mouseCell) {
+          trail.unshift({ ...mouseCell });
+          if (trail.length > 10) trail.length = 10;
+        }
+        mouseCell = { x: col, y: row };
+      }
+    });
+
+    window.addEventListener("mouseleave", () => {
+      mouseCell = null;
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+
+    resizeCanvas();
+    animate();
+  </script>
+</body>
+</html>
