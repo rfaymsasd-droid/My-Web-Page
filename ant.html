@@ -1,255 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acromyrmex octospinosus | A Living Garden</title>
-    <style>
-        /* Base Dark Natural History Theme */
-        :root {
-            --bg-color: #0b0e0b;
-            --text-main: #e2e8e2;
-            --text-muted: #8b998b;
-            --accent: #4a5c4a;
-            --accent-glow: rgba(74, 92, 74, 0.4);
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.7;
-            overflow-x: hidden;
-        }
-
-        /* React Bits Equivalent: BlurText Animation */
-        .blur-text {
-            filter: blur(10px);
-            opacity: 0;
-            transform: translateY(20px);
-            animation: unblur 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-
-        @keyframes unblur {
-            to {
-                filter: blur(0);
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Typography & Layout */
-        header.hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 2rem;
-            background: radial-gradient(circle at center, #151a15 0%, var(--bg-color) 100%);
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            letter-spacing: -0.03em;
-            margin: 0 0 1rem 0;
-            font-weight: 300;
-        }
-
-        h1 span {
-            display: block;
-            font-style: italic;
-            color: var(--text-muted);
-            font-size: 0.5em;
-            letter-spacing: 0;
-            margin-top: 0.5rem;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            animation-delay: 0.3s;
-        }
-
-        main {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
-
-        p {
-            font-size: 1.15rem;
-            margin-bottom: 2rem;
-            color: #c0c8c0;
-        }
-
-        /* React Bits Equivalent: ScrollReveal */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Imagery & Field Plates */
-        .image-container {
-            margin: 4rem 0;
-            border-radius: 4px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .image-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 7s ease;
-        }
-
-        .image-container:hover img {
-            transform: scale(1.03); /* Subtle documentary pan effect */
-        }
-
-        figcaption {
-            padding: 1rem;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            border-top: 1px solid rgba(255,255,255,0.05);
-            background: #111511;
-        }
-
-        /* Works Cited Section */
-        .citations {
-            margin-top: 6rem;
-            padding-top: 3rem;
-            border-top: 1px solid var(--accent);
-        }
-
-        .citations h3 {
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-        }
-
-        .citation-item {
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            padding-left: 2rem;
-            text-indent: -2rem; /* Hanging indent for academic look */
-            color: var(--text-muted);
-        }
-
-        .citation-item a {
-            color: var(--text-main);
-            text-decoration: none;
-            border-bottom: 1px dotted var(--accent);
-        }
-    </style>
+  <title>Acromyrmex Octospinosus</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <header class="hero">
-        <h1 class="blur-text">The Team is the Mind <span>Acromyrmex octospinosus</span></h1>
-        <p class="subtitle blur-text" style="animation-delay: 0.3s;">
-            How millions of simple individuals forge one of the smartest superorganisms on Earth.
-        </p>
-    </header>
+  <h1>The Team is the Mind</h1>
+  <h2>Acromyrmex Octospinosus</h2>
 
-    <main>
-        <div class="reveal">
-            <p>When we think about smart animals, we usually picture a chimpanzee using a stick to get food or a dolphin learning a new trick. We usually do not think about bugs. However, the <em>Acromyrmex octospinosus</em>, a type of leaf-cutter ant from Central and South America, changes how we think about intelligence.</p>
-            <p>You cannot really call one single ant a "genius." Instead, millions of these ants work together to form a "superorganism." This means that while one ant might be simple, the whole colony is incredibly smart. By dividing up jobs, farming their own food, and learning from their mistakes, these ants act a lot like a human city.</p>
-        </div>
+  <p>
+    The Acromyrmex octospinosus is a type of leaf-cutter ant
+    from Central and South America.
+  </p>
 
-        <figure class="image-container reveal">
-            <img src="image_f91ad2.jpg" alt="Macro photography of an Acromyrmex octospinosus worker">
-            <figcaption><strong>Specimen Profile:</strong> The spined exoskeleton and powerful mandibles of an <em>A. octospinosus</em> worker, adapted for rigorous foraging and defense.</figcaption>
-        </figure>
+  <p>
+    These ants work together as a colony, or "superorganism."
+    Different ants have different jobs in the colony.
+  </p>
 
-        <div class="reveal">
-            <p>The home of this ant plays a big part in how it survives. These ants live in the warm, wet rainforests and dry scrublands of places ranging from southern Mexico down to South America. It is a tough environment filled with predators and changing weather.</p>
-            <p>Unlike some other ants that build giant, deep underground cities, the <em>Acromyrmex octospinosus</em> is more flexible. They build their nests in shallower dirt, under large rocks, or inside piles of dead leaves and wood. Because their nests are closer to the surface, the ants have to be smart about the weather. They constantly rebuild the tunnels to keep the temperature and moisture inside just right. They do this to protect their most important treasure: their food.</p>
-        </div>
+  <img class="ant-image"
+       src="image_f91ad2.jpg"
+       alt="Acromyrmex octospinosus worker">
 
-        <div class="reveal">
-            <p>The real secret to the colony's brilliance is how they share the work. The colony has a strict system where an ant's job is based entirely on its size. You can think of this as the colony's "curriculum" or life plan for every ant.</p>
-            <ul style="color: #c0c8c0; margin-bottom: 2rem; line-height: 1.8;">
-                <li><strong>The Majors:</strong> These are the largest ants, and they act as the soldiers of the colony, using their big jaws to fight off predators.</li>
-                <li><strong>The Medias:</strong> These are the workers you usually see on nature shows. They march out of the nest, cut perfectly shaped pieces of leaves, and carry them miles back home.</li>
-                <li><strong>The Minors:</strong> These stay closer to home. They guard the nest and help chew up the leaves once the medias bring them inside.</li>
-                <li><strong>The Minims:</strong> The tiniest ants. They often ride on top of the leaves being carried by the medias to fight off dangerous flies. Inside the nest, they are the specialized gardeners.</li>
-            </ul>
-        </div>
+  <h2>Jobs in the Colony</h2>
 
-        <figure class="image-container reveal">
-            <img src="image_f91b0a.jpg" alt="A field plate showing multiple angles, behaviors, and castes of the leafcutter ant">
-            <figcaption><strong>Field Plate & Behavior:</strong> A comprehensive look at the colony in action—from foraging and load-carrying to anatomical details and the fungal gardens they meticulously cultivate.</figcaption>
-        </figure>
+  <ul>
+    <li><b>Majors:</b> Protect the colony.</li>
+    <li><b>Medias:</b> Cut and carry leaves.</li>
+    <li><b>Minors:</b> Help protect and maintain the nest.</li>
+    <li><b>Minims:</b> Help care for the fungus garden.</li>
+  </ul>
 
-        <div class="reveal">
-            <p>The coolest and "smartest" thing about these ants is that they are farmers. Most people think leaf-cutter ants eat leaves, but they actually do not. Instead, they chew up the leaves and use them like soil to grow a special fungus called <em>Leucoagaricus gongylophorus</em>. The ants feed the leaves to the fungus, and the fungus grows little nutritious knobs that the ants eat.</p>
-            <p>This farming system also shows how the colony learns. If a worker ant brings back a poisonous leaf, the fungus gets sick and gives off a chemical warning smell. The tiny minim ants smell this warning and use their own chemicals to tell the rest of the colony. Almost instantly, the whole colony learns to stop cutting leaves from that specific poisonous plant. This fast learning is why scientists consider the colony to be so intelligent.</p>
-        </div>
+  <h2>Farming</h2>
 
-        <div class="reveal">
-            <p>These ants even know how to use medicine. Sometimes, a bad mold called <em>Escovopsis</em> gets into their nests and tries to eat their fungus gardens. To fight this, the ants grow a special type of bacteria on their own bodies. This bacteria makes a powerful antibiotic. When the bad mold appears, the ants rub the antibiotic on their gardens to kill it. Farming food, managing a clean nest, and making medicine are things humans did not figure out until recently, but these ants have been doing it for millions of years.</p>
-            <p>In conclusion, it might be silly to give a single ant an IQ test, but the <em>Acromyrmex octospinosus</em> colony is brilliant. Because they can adapt to their environment, share jobs perfectly, farm their own food, and learn as a group, they are one of the smartest animal societies on Earth. They prove that sometimes the best brains belong to a team, not just one individual.</p>
-        </div>
+  <p>
+    Leaf-cutter ants do not eat the leaves they collect.
+    They use the leaves to grow a special fungus, which they eat.
+  </p>
 
-        <!-- Works Cited -->
-        <section class="citations reveal">
-            <h3>Works Cited</h3>
-            <div class="citation-item">
-                "Acromyrmex Octospinosus." <em>AntWeb</em>, California Academy of Sciences, 2024, <a href="https://www.antweb.org/description.do?genus=acromyrmex&species=octospinosus" target="_blank">antweb.org</a>.
-            </div>
-            <div class="citation-item">
-                Currie, Cameron R., et al. "Coevolution of Interacting Lineages in the Agromyzid Leaf-Cutter Ant-Microbe Symbiosis." <em>Science</em>, vol. 299, no. 5605, 2003, pp. 386-388.
-            </div>
-            <div class="citation-item">
-                Hölldobler, Bert, and Edward O. Wilson. <em>The Superorganism: The Beauty, Elegance, and Strangeness of Insect Societies.</em> W. W. Norton & Company, 2009.
-            </div>
-            <div class="citation-item">
-                Meyer, John R. "Leafcutter Ants." <em>NC State University Department of Entomology</em>, North Carolina State University, 12 Mar. 2015, <a href="http://www.cals.ncsu.edu/course/ent425/tutorial/Ecology/leafcutter_ants.html" target="_blank">cals.ncsu.edu</a>.
-            </div>
-            <div class="citation-item">
-                "The Leafcutter Ant: A Master Farmer." <em>San Diego Zoo Animals & Plants</em>, San Diego Zoo Wildlife Alliance, 2024, <a href="https://animals.sandiegozoo.org/animals/leafcutter-ant" target="_blank">animals.sandiegozoo.org</a>.
-            </div>
-        </section>
-    </main>
+  <img class="ant-image"
+       src="image_f91b0a.jpg"
+       alt="Leaf-cutter ant colony">
 
-    <script>
-        // React Bits Equivalent: ScrollReveal functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            const reveals = document.querySelectorAll('.reveal');
-            
-            const revealOptions = {
-                threshold: 0.15,
-                rootMargin: "0px 0px -50px 0px"
-            };
+  <h2>Conclusion</h2>
 
-            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target); // Only animate once
-                    }
-                });
-            }, revealOptions);
+  <p>
+    Acromyrmex octospinosus colonies are impressive because
+    thousands of ants work together to survive.
+  </p>
 
-            reveals.forEach(reveal => {
-                revealOnScroll.observe(reveal);
-            });
-        });
-    </script>
+  <p>
+    <a href="index.html">Go to my home page!</a>
+  </p>
+
 </body>
 </html>
