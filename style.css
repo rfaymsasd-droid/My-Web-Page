@@ -18,3 +18,10 @@ body {
   color: White;
   font-size: 80px;
 }
+
+.ant-image {
+  width: 300px;
+  height: auto;
+  margin: 10px;
+  border-radius: 8px;
+}
