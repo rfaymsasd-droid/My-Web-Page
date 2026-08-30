@@ -30,3 +30,14 @@ body {
   border-radius: 8px;
   border: 2px solid #355C3A;
 }
+
+table {
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 2px solid white;
+  padding: 10px 20px;
+  text-align: center;
+}
