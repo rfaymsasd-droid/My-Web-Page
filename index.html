@@ -39,12 +39,8 @@
     </i>
   </p>
   
-  <button id="colorButton" onclick="changeColor()">
+<button id="colorButton" onclick="changeColor()">
   Click me
-</button>
-
-<button id="bgButton" onclick="changeBackground()">
-  Change the background
 </button>
 
 </body>
@@ -52,14 +48,11 @@
 <script>
   function changeColor() {
     var myButton = document.getElementById("colorButton");
-    myButton.style.backgroundColor = "orange";
-  }
-</script>
 
-<script>
-function changeBackground() {
-  document.body.style.backgroundColor = "black";
-}
+    var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+
+    myButton.style.backgroundColor = randomColor;
+  }
 </script>
 
 </html>
