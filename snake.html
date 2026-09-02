@@ -30,6 +30,19 @@
   ctx.fillRect(head.x, head.y, 20, 20);
 }
  
+setInterval(step, 100);
+  </script>
+
+  <script>function step() {
+  head.x = head.x + 20;
+ 
+  if (head.x > 380) {
+    head.x = 0;
+  }
+ 
+  setInterval(step, 100);
+}
+</script>
 drawBoard();
 </script>
 </body>
