@@ -7,41 +7,38 @@
   <p><a href="index.html">Back to home</a></p>
   <canvas id="gameCanvas" width="400" height="400"></canvas>
  
-  <script>
- function step() {
-  snake.x = snake.x + 20;
- 
-  if (snake.x > 380) {
-    snake.x = 0;
-  }
- 
-  drawBoard();
-}
+<script>
+  var canvas = document.getElementById("gameCanvas");
+  var ctx = canvas.getContext("2d");
+  var CELL = 20;
+  var COLS = canvas.width / CELL;
+  var ROWS = canvas.height / CELL;
 
+  var snake = { x: 5, y: 5 };
 
-    var canvas = document.getElementById("gameCanvas");
-    var ctx = canvas.getContext("2d");
-    var CELL = 20;
- 
-    var snake = { x: 5, y: 5 };
- 
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, 400, 400);
- 
-    ctx.fillStyle = "lime";
+  function drawBoard() {
+    ctx.fillStyle = "#1b1b1b";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#3ddc84";
     ctx.fillRect(snake.x * CELL, snake.y * CELL, CELL, CELL);
-  
-    function drawBoard() {
-  ctx.fillStyle = "#1b1b1b";
-  ctx.fillRect(0, 0, 400, 400);
- 
-  ctx.fillStyle = "#3ddc84";
-  ctx.fillRect(head.x, head.y, 20, 20);
-}
- 
-setInterval(step, 100);
-      
-drawBoard();
+  }
+
+  function step() {
+
+    snake.x = snake.x + 1;
+
+
+    if (snake.x >= COLS) {
+      snake.x = 0;
+    }
+
+    drawBoard();
+  }
+
+  setInterval(step, 100);
+
+  drawBoard();
 </script>
 </body>
 </html>
