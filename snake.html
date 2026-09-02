@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
 <head>
   <title>Snake</title>
   <link rel="stylesheet" href="style.css">
@@ -10,6 +8,17 @@
   <canvas id="gameCanvas" width="400" height="400"></canvas>
  
   <script>
+ function step() {
+  snake.x = snake.x + 20;
+ 
+  if (snake.x > 380) {
+    snake.x = 0;
+  }
+ 
+  drawBoard();
+}
+
+
     var canvas = document.getElementById("gameCanvas");
     var ctx = canvas.getContext("2d");
     var CELL = 20;
@@ -21,8 +30,8 @@
  
     ctx.fillStyle = "lime";
     ctx.fillRect(snake.x * CELL, snake.y * CELL, CELL, CELL);
-  </script>
-  <script>function drawBoard() {
+  
+    function drawBoard() {
   ctx.fillStyle = "#1b1b1b";
   ctx.fillRect(0, 0, 400, 400);
  
@@ -31,18 +40,7 @@
 }
  
 setInterval(step, 100);
-  </script>
-
-  <script>function step() {
-  head.x = head.x + 20;
- 
-  if (head.x > 380) {
-    head.x = 0;
-  }
- 
-  setInterval(step, 100);
-}
-</script>
+      
 drawBoard();
 </script>
 </body>
