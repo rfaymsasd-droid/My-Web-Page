@@ -21,6 +21,16 @@
  
     ctx.fillStyle = "lime";
     ctx.fillRect(snake.x * CELL, snake.y * CELL, CELL, CELL);
+
+    function drawBoard() {
+  ctx.fillStyle = "#1b1b1b";
+  ctx.fillRect(0, 0, 400, 400);
+ 
+  ctx.fillStyle = "#3ddc84";
+  ctx.fillRect(head.x, head.y, 20, 20);
+}
+ 
+drawBoard();
   </script>
 </body>
 </html>
