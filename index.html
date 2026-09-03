@@ -1,58 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>My Portfolio</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+  <head>
+    <title>My Portfolio</title>
+   <link rel="stylesheet" href="style.css">
+  </head>
 
-<body>
-  <h1>Welcome to my portfolio!</h1>
+  <body>
+    <h1>Welcome to my portfolio!</h1>
 
-  <p><a href="example.html">Go to my example page!</a></p>
-  <p><a href="about_me.html">Go to my about me page!</a></p>
-  <p><a href="ant.html">Go to my favorite ant page!</a></p>
-  <p><a href="snake.html">Go to my snake game page!</a></p>
+    <p><a href="about_me.html">Go to my about me page!</a></p>
+    <p><a href="ant.html">Go to my favorite ant page!</a></p>
+    <p><a href="snake.html">Go to my snake game page!</a></p>
 
-  <img class="ant-image"
-       src="https://images.pexels.com/photos/8192903/pexels-photo-8192903.jpeg"
-       alt="Close up photo of an ant carrying a piece of leaf.">
+   <img class="ant-image"
+        src="https://images.pexels.com/photos/8192903/pexels-photo-8192903.jpeg"
+        alt="Close up photo of an ant carrying a piece of leaf.">
 
-  <img class="ant-image"
-       src="https://images.pexels.com/photos/3521277/pexels-photo-3521277.jpeg"
-       alt="Detailed macro photograph of an ant with pollen on a green leaf, showcasing intricate details.">
+    <img class="ant-image"
+         src="https://images.pexels.com/photos/3521277/pexels-photo-3521277.jpeg"
+         alt="Detailed macro photograph of an ant with pollen on a green leaf, showcasing intricate details.">
 
-  <img class="ant-image"
-       src="https://images.pexels.com/photos/30563395/pexels-photo-30563395.jpeg"
-       alt="Macro shot of an ant on dry leaves in autumn setting.">
+   <img class="ant-image"
+         src="https://images.pexels.com/photos/30563395/pexels-photo-30563395.jpeg"
+         alt="Macro shot of an ant on dry leaves in autumn setting.">
 
-  <img class="ant-image"
-       src="https://images.pexels.com/photos/8155519/pexels-photo-8155519.jpeg"
-       alt="Vivid macro shot of a red ant climbing a textured branch outdoors.">
+   <img class="ant-image"
+         src="https://images.pexels.com/photos/8155519/pexels-photo-8155519.jpeg"
+         alt="Vivid macro shot of a red ant climbing a textured branch outdoors.">
 
-  <img class="ant-image"
-       src="https://images.pexels.com/photos/17818762/pexels-photo-17818762.jpeg"
-       alt="Detailed close-up of an ant exploring a vivid green fern leaf in nature.">
+   <img class="ant-image"
+        src="https://images.pexels.com/photos/17818762/pexels-photo-17818762.jpeg"
+        alt="Detailed close-up of an ant exploring a vivid green fern leaf in nature.">
 
-  <p>
-    <i>Look! It's my favorite ant,
-      <b>Acromyrmex Octospinosus!</b>
-    </i>
-  </p>
+   <p>
+      <i>Look! It's my favorite ant,
+        <b>Acromyrmex Octospinosus!</b>
+     </i>
+   </p>
   
-<button id="colorButton" onclick="changeColor()">
+   <button id="colorButton" onclick="changeColor()">
   Click me
-</button>
+   </button>
 
-</body>
+  </body>
 
-<script>
-  function changeColor() {
-    var myButton = document.getElementById("colorButton");
+  <script>
+    function changeColor() {
+     var myButton = document.getElementById("colorButton");
 
-    var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+     var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
 
-    myButton.style.backgroundColor = randomColor;
-  }
-</script>
+      myButton.style.backgroundColor = randomColor;
+   }
+  </script>
 
 </html>
