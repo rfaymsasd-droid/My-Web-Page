@@ -41,6 +41,27 @@
   setInterval(step, 100);
 
   drawBoard();
+
+  function step() {
+  snake.x = snake.x + dx;
+  snake.y = snake.y + dy;
+ 
+  if (snake.x > 380) { snake.x = 0; }
+  if (snake.x < 0) { snake.x = 380; }
+  if (snake.y > 380) { snake.y = 0; }
+  if (snake.y < 0) { snake.y = 380; }
+ 
+  drawBoard();
+}
+
+  if (event.key === "ArrowUp") {
+    dx = 0;
+    dy = -20;
+  }
+  if (event.key === "ArrowDown") {
+    dx = 0;
+    dy = 20;
+  }
 </script>
 </body>
 </html>
