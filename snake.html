@@ -6,87 +6,65 @@
   </head>
 
   <body>
-
-   <h1>Snake Game! :D</h1>
-
-   <p><a href="index.html">Back home</a></p>
-
-   <canvas id="gameCanvas" width="400" height="400"></canvas>
-
-   <script>
+    <h1>This is my Snake game page</h1>
+    <p><a href="index.html">Back to home</a></p>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+      <script>
       var canvas = document.getElementById("gameCanvas");
-      var ctx = canvas.getContext("2d");
-
-      var CELL = 20;
-      var COLS = canvas.width / CELL;
-     var ROWS = canvas.height / CELL;
-
-     var snake = {
-       x: 100,
-        y: 100
-     };
-
-     var dx = 20;
-     var dy = 0;
-
+       var ctx = canvas.getContext("2d");
+       var CELL = 20;
+ 
+      var snake = { x: 100, y: 10 };
+ 
       function drawBoard() {
-       ctx.fillStyle = "#1b1b1b";
-       ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = "#3ddc84";
-        ctx.fillRect(snake.x, snake.y, CELL, CELL);
+       ctx.fillStyle = "dodgerblue";
+       ctx.fillRect(0, 0, 400, 400);
+       ctx.fillStyle = "#3ddc84";
+       ctx.fillRect(snake.x, snake.y, 20, 20);
       }
-
+ 
       function step() {
-        snake.x = snake.x + dx;
-        snake.y = snake.y + dy;
-
         if (snake.x > 380) {
           snake.x = 0;
-        }
-
-        if (snake.x < 0) {
-          snake.x = 380;
-        }
-
-        if (snake.y > 380) {
-          snake.y = 0;
-        }
-
-        if (snake.y < 0) {
-          snake.y = 380;
-        }
-
-        drawBoard();
+       }
+       snake.x = snake.x + dx;
+       snake.y = snake.y + dy;
+       
+       if (snake.x > 380) { snake.x = 0; }
+       if (snake.x < 0) { snake.x = 380; }
+       if (snake.y > 380) { snake.y = 0; }
+       if (snake.y < 0) { snake.y = 380; }
+       drawBoard();
       }
+      
+      setInterval(step, 100);
 
-      document.addEventListener("keydown", function(event) {
+      var dx = 20;
+      var dy = 0;
+ 
 
-        if (event.key === "ArrowRight") {
-          dx = 20;
-          dy = 0;
-        }
-
+     document.addEventListener("keydown", function(event) {
+       console.log(event.key);
+     });
+     document.addEventListener("keydown", function(event) {
         if (event.key === "ArrowLeft") {
           dx = -20;
           dy = 0;
         }
-
+        if (event.key === "ArrowRight") {
+          dx = 20;
+          dy = 0;
+        }
         if (event.key === "ArrowUp") {
           dx = 0;
-          dy = -20;
-        }
-
+         dy = -20;
+       }
         if (event.key === "ArrowDown") {
-          dx = 0;
-          dy = 20;
-        }
-      });
+         dx = 0;
+         dy = 20;
+       }
 
-        setInterval(step, 100);
-
-        drawBoard();
+     });
      </script>
-
   </body>
 </html>
