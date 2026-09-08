@@ -4,23 +4,25 @@
     <title>Snake Game! :D</title>
     <link rel="stylesheet" href="style.css">
   </head>
-  <body>
-   <h1>Snake Game! :D</h1>
-   <p><a href="index.html">Back to home</a></p>
-   <canvas id="gameCanvas" width="400" height="400"></canvas>
 
-   <script>
+  <body>
+    <h1>Snake Game! :D</h1>
+    <p><a href="index.html">Back to home</a></p>
+
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <script>
       var canvas = document.getElementById("gameCanvas");
       var ctx = canvas.getContext("2d");
 
       var snake = { x: 20, y: 20 };
-      var dx = 20;                  
-      var dy = 0;                   
-      var body = [];                
-      var snakeLength = 3;          
+      var dx = 20;
+      var dy = 0;
+      var body = [];
+      var snakeLength = 3;
       var apple = { x: 200, y: 200 };
 
-     function drawBoard() {
+      function drawBoard() {
         ctx.fillStyle = "#1b1b1b";
         ctx.fillRect(0, 0, 400, 400);
 
@@ -38,53 +40,57 @@
       var timer = setInterval(step, 100);
 
       function step() {
-    snake.x = snake.x + dx;
-    snake.y = snake.y + dy;
-        
-    if (snake.x > 380) { snake.x = 0; }
-    if (snake.x < 0) { snake.x = 380; }
-    if (snake.y > 380) { snake.y = 0; }
-    if (snake.y < 0) { snake.y = 380; }
-        
-    for (var i = 0; i < body.length; i++) {
-      if (body[i].x === snake.x && body[i].y === snake.y) {
-        clearInterval(timer);
-        alert("Game over");
-        return;
+        snake.x = snake.x + dx;
+        snake.y = snake.y + dy;
+
+        if (snake.x > 380) { snake.x = 0; }
+        if (snake.x < 0) { snake.x = 380; }
+        if (snake.y > 380) { snake.y = 0; }
+        if (snake.y < 0) { snake.y = 380; }
+
+        for (var i = 0; i < body.length; i++) {
+          if (body[i].x === snake.x && body[i].y === snake.y) {
+            clearInterval(timer);
+            alert("Game over");
+            return;
+          }
+        }
+
+        body.push({ x: snake.x, y: snake.y });
+
+        while (body.length > snakeLength) {
+          body.shift();
+        }
+
+        if (snake.x === apple.x && snake.y === apple.y) {
+          snakeLength = snakeLength + 1;
+          apple.x = Math.floor(Math.random() * 20) * 20;
+          apple.y = Math.floor(Math.random() * 20) * 20;
+        }
+
+        drawBoard();
       }
-    }
-    
-    body.push({ x: snake.x, y: snake.y });
-    
-    while (body.length > snakeLength) {
-      body.shift();
-    }
-    
-    if (snake.x === apple.x && snake.y === apple.y) {
-      snakeLength = snakeLength + 1;
-      apple.x = Math.floor(Math.random() * 20) * 20;
-      apple.y = Math.floor(Math.random() * 20) * 20;
-    }
-    
-    drawBoard();
-  }
 
       document.addEventListener("keydown", function(event) {
-        if (event.key === "ArrowRight") {
-          dx = 20;
-          dy = 0;
-        }
-        if (event.key === "ArrowLeft") {
-          dx = -20;
-          dy = 0;
-        }
-        if (event.key === "ArrowUp") {
+
+        if (event.key === "w" || event.key === "W") {
           dx = 0;
           dy = -20;
         }
-        if (event.key === "ArrowDown") {
+
+        if (event.key === "a" || event.key === "A") {
+          dx = -20;
+          dy = 0;
+        }
+
+        if (event.key === "s" || event.key === "S") {
           dx = 0;
           dy = 20;
+        }
+
+        if (event.key === "d" || event.key === "D") {
+          dx = 20;
+          dy = 0;
         }
       });
     </script>
