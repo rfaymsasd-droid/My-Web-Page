@@ -42,7 +42,7 @@ th, td {
   text-align: center;
 }
 
-.image {
+.monakaiimage {
   width: 300px;
   height: auto;
   margin: 10px;
@@ -50,10 +50,18 @@ th, td {
   border: 2px smooth #f70052;
 }
 
-.monakai-image {
+.neon-image {
   width: 300px;
   height: auto;
   margin: 10px;
   border-radius: 8px;
   border: 2px smooth #8cf700;
+}
+
+.mono-image {
+  width: 300px;
+  height: auto;
+  margin: 10px;
+  border-radius: 8px;
+  border: 2px smooth #FFFFFF;
 }
