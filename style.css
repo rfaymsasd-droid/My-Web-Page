@@ -41,3 +41,19 @@ th, td {
   padding: 10px 20px;
   text-align: center;
 }
+
+.image {
+  width: 300px;
+  height: auto;
+  margin: 10px;
+  border-radius: 8px;
+  border: 2px smooth #f70052;
+}
+
+.monakai-image {
+  width: 300px;
+  height: auto;
+  margin: 10px;
+  border-radius: 8px;
+  border: 2px smooth #8cf700;
+}
