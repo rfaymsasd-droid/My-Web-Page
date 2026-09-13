@@ -1,45 +1,440 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Artificial Intelligent Persuasive Essay!</title>
-    <link rel="stylesheet" href="ai-style.css">
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A persuasive essay weighing what artificial intelligence gives humanity against what it takes.">
+  <title>Artificial Intelligence — A Persuasive Essay</title>
 
-  <body>
-    <article>
-     <h1>Artificial Intelligence</h1>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-      <h2>Why Artificial Intelligence is Good for Humanity:</h2>
-         <ol>
-           <li>In a scientific lab of some college, artificial intelligence had created an antiviral organism
-             that fought off viruses and harmful drugs. The viruses even multiplied using the hosts of the 
-             viruses to overpopulate on the tetridisk.</li>
-           <li>Artificial intelligence is also currently finding new ways to prevent or have some kind of 
-            resistance towards cancer. They do this by collecting tons of data and looking for patterns from 
-            each victim.</li>
-           <li>Artificial intelligence also helps innovate humanity by helping us with organization, research, 
-            technologies, and so much more. Artificial intelligence also finds stuff that us humans might miss.</li>
-          </ol>
+  <style>
+    :root {
+      --ink: #0c0a08;
+      --surface: rgba(24, 18, 13, 0.72);
+      --rule: rgba(255, 122, 47, 0.16);
+      --paper: #f6efe6;
+      --muted: #a3907e;
+      --ember: #ff7a2f;
+      --ember-dim: #c2542a;
+      --ash: #8d7d6e;
+    }
 
-      <h2>Why Artificial Intelligence is Bad for Humanity:</h2>
-          <ol>
-            <li>People do not always use artificial intelligence responsibly. For example, some people might use 
-              artificial intelligence for mischief (like hacking, dark web searching, and some that I might not 
-              know about), cheating, bad intentions to one another, and other things I also might not know about.</li>
-            <li>People can use artificial intelligence to copy, copyright, pirate, plagiarize, or claim content 
-              like art, writing, entertainment, and slop as their own.</li>
-            <li>Humans can lose creativity, credibility, and motivation to not be lazy and see the wonders of 
-              genuinely learning and/or understanding something.</li>
-          </ol>
-    </article>
+    * { box-sizing: border-box; }
 
-     <p><a href="index.html">Go to back home!</a></p>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(255, 122, 47, 0.13), transparent 30rem),
+        radial-gradient(circle at 88% 82%, rgba(140, 52, 20, 0.12), transparent 26rem),
+        var(--ink);
+    }
 
-   <img class=".claude-image"
-       src="https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/light/claude-color.png"
-       alt="Normal Version of Claude's Logo">
+    #shape-grid {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      opacity: 0.55;
+    }
 
-     <script>
-    </script>
-  </body>
+    main {
+      width: min(100% - 2rem, 780px);
+      margin: 0 auto;
+      padding: 6rem 0 4rem;
+    }
+
+    /* ---- masthead ---- */
+
+    .masthead {
+      padding: clamp(2rem, 6vw, 4rem);
+      border: 1px solid var(--rule);
+      border-radius: 24px;
+      background: var(--surface);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: Newsreader, Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(2.8rem, 9vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: -0.035em;
+      color: var(--ember);
+    }
+
+    .standfirst {
+      max-width: 52ch;
+      margin: 1.5rem 0 0;
+      color: var(--muted);
+      font-family: Newsreader, Georgia, serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* ---- argument sections ---- */
+
+    .argument {
+      margin-top: clamp(3.5rem, 9vw, 6rem);
+    }
+
+    .argument h2 {
+      margin: 0 0 2.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--rule);
+      font-family: Newsreader, Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .argument--for h2 { color: var(--ember); }
+    .argument--against h2 { color: var(--ash); }
+
+    .argument ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: claim;
+    }
+
+    .argument li {
+      counter-increment: claim;
+      position: relative;
+      padding-left: 4.5rem;
+      margin-bottom: 2.75rem;
+      font-family: Newsreader, Georgia, serif;
+      font-size: 1.12rem;
+      line-height: 1.75;
+      color: var(--paper);
+    }
+
+    .argument li::before {
+      content: counter(claim);
+      position: absolute;
+      top: -0.5rem;
+      left: 0;
+      font-family: Newsreader, Georgia, serif;
+      font-weight: 600;
+      font-size: 3.2rem;
+      line-height: 1;
+    }
+
+    .argument--for li::before { color: rgba(255, 122, 47, 0.28); }
+    .argument--against li::before { color: rgba(141, 125, 110, 0.26); }
+
+    /* the counter-argument sits visually cooler and set back */
+    .argument--against li {
+      color: #ded3c7;
+    }
+
+    /* ---- closing ---- */
+
+    .colophon {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem 1.75rem;
+      margin-top: clamp(3.5rem, 9vw, 6rem);
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .home-link {
+      color: var(--ember);
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      transition: border-color 180ms ease, color 180ms ease;
+    }
+
+    .home-link:hover,
+    .home-link:focus-visible {
+      color: #ffa066;
+      border-bottom-color: currentColor;
+      outline: none;
+    }
+
+    .essay-link {
+      padding: 0.65rem 1.25rem;
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      color: var(--paper);
+      background: rgba(255, 122, 47, 0.07);
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
+    }
+
+    .essay-link:hover,
+    .essay-link:focus-visible {
+      border-color: var(--ember);
+      background: rgba(255, 122, 47, 0.15);
+      color: #ffa066;
+      outline: none;
+    }
+
+    /* ---- fixed credit note ---- */
+
+    .credit-note {
+      position: fixed;
+      top: 1.75rem;
+      left: 1.5rem;
+      z-index: 10;
+      margin: 0;
+      max-width: 14ch;
+      color: var(--muted);
+      font-size: 0.7rem;
+      line-height: 1.45;
+      letter-spacing: 0.01em;
+      opacity: 0.45;
+      pointer-events: none;
+      transition: opacity 180ms ease;
+    }
+
+    body:hover .credit-note { opacity: 0.7; }
+
+    /* ---- fixed logo badge ---- */
+
+    .logo-badge {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      width: 60px;
+      height: 60px;
+      padding: 12px;
+      border: 1px solid var(--rule);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(14px);
+      transition: border-color 180ms ease, transform 180ms ease;
+    }
+
+    .logo-badge:hover {
+      border-color: var(--ember);
+      transform: translateY(-2px);
+    }
+
+    .logo-badge img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 560px) {
+      main { padding-top: 6rem; }
+      .argument li { padding-left: 3.25rem; }
+      .argument li::before { font-size: 2.4rem; }
+
+      .logo-badge {
+        top: 1rem;
+        right: 1rem;
+        width: 46px;
+        height: 46px;
+        padding: 9px;
+        border-radius: 13px;
+      }
+
+      .credit-note {
+        top: 1.15rem;
+        left: 1rem;
+        max-width: 11ch;
+        font-size: 0.62rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #shape-grid { display: none; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="shape-grid" aria-hidden="true"></canvas>
+
+  <p class="credit-note">Everything but the essay was created using Claude!</p>
+
+  <div class="logo-badge">
+    <img src="https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/light/claude-color.png"
+         alt="Claude logo">
+  </div>
+
+  <main>
+    <header class="masthead">
+      <h1>Artificial Intelligence</h1>
+      <p class="standfirst">
+        The same technology curing disease is the one teaching us not to think. Both cases, weighed honestly.
+      </p>
+    </header>
+
+    <section class="argument argument--for">
+      <h2>Why artificial intelligence is good for humanity</h2>
+      <ol>
+        <li>In a scientific lab of some college, artificial intelligence had created an antiviral organism
+          that fought off viruses and harmful drugs. The viruses even multiplied using the hosts of the
+          viruses to overpopulate on the tetridisk.</li>
+        <li>Artificial intelligence is also currently finding new ways to prevent or have some kind of
+          resistance towards cancer. They do this by collecting tons of data and looking for patterns from
+          each victim.</li>
+        <li>Artificial intelligence also helps innovate humanity by helping us with organization, research,
+          technologies, and so much more. Artificial intelligence also finds stuff that us humans might miss.</li>
+      </ol>
+    </section>
+
+    <section class="argument argument--against">
+      <h2>Why artificial intelligence is bad for humanity</h2>
+      <ol>
+        <li>People do not always use artificial intelligence responsibly. For example, some people might use
+          artificial intelligence for mischief (like hacking, dark web searching, and some that I might not
+          know about), cheating, bad intentions to one another, and other things I also might not know about.</li>
+        <li>People can use artificial intelligence to copy, copyright, pirate, plagiarize, or claim content
+          like art, writing, entertainment, and slop as their own.</li>
+        <li>Humans can lose creativity, credibility, and motivation to not be lazy and see the wonders of
+          genuinely learning and/or understanding something.</li>
+      </ol>
+    </section>
+
+    <footer class="colophon">
+      <a class="home-link" href="index.html">Back to my portfolio</a>
+      <a class="essay-link" href="original.html">Original essay</a>
+    </footer>
+  </main>
+
+  <script>
+    // Shape Grid background, adapted from React Bits for a plain HTML page.
+    const canvas = document.getElementById("shape-grid");
+    const ctx = canvas.getContext("2d");
+
+    const size = 44;
+    const speed = 0.26;
+    let offsetX = 0;
+    let offsetY = 0;
+    let mouseCell = null;
+    const trail = [];
+    const opacities = new Map();
+
+    function resizeCanvas() {
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * ratio;
+      canvas.height = window.innerHeight * ratio;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+
+    function cellKey(x, y) {
+      return `${x},${y}`;
+    }
+
+    function updateOpacities() {
+      const targets = new Map();
+
+      if (mouseCell) {
+        targets.set(cellKey(mouseCell.x, mouseCell.y), 1);
+      }
+
+      trail.forEach((cell, index) => {
+        const key = cellKey(cell.x, cell.y);
+        if (!targets.has(key)) {
+          targets.set(key, (trail.length - index) / (trail.length + 1));
+        }
+      });
+
+      targets.forEach((value, key) => {
+        if (!opacities.has(key)) opacities.set(key, 0);
+      });
+
+      opacities.forEach((opacity, key) => {
+        const target = targets.get(key) || 0;
+        const next = opacity + (target - opacity) * 0.14;
+
+        if (next < 0.01) opacities.delete(key);
+        else opacities.set(key, next);
+      });
+    }
+
+    function drawGrid() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const startX = -size;
+      const startY = -size;
+      const columns = Math.ceil(width / size) + 3;
+      const rows = Math.ceil(height / size) + 3;
+
+      for (let col = 0; col < columns; col++) {
+        for (let row = 0; row < rows; row++) {
+          const x = startX + col * size + offsetX;
+          const y = startY + row * size + offsetY;
+          const key = cellKey(col, row);
+          const opacity = opacities.get(key) || 0;
+
+          if (opacity > 0) {
+            ctx.fillStyle = `rgba(255, 122, 47, ${opacity * 0.34})`;
+            ctx.fillRect(x, y, size, size);
+          }
+
+          ctx.strokeStyle = "rgba(255, 122, 47, 0.14)";
+          ctx.lineWidth = 1;
+          ctx.strokeRect(x, y, size, size);
+        }
+      }
+    }
+
+    function animate() {
+      offsetX -= speed;
+      offsetY -= speed;
+
+      if (offsetX <= -size) offsetX += size;
+      if (offsetY <= -size) offsetY += size;
+
+      updateOpacities();
+      drawGrid();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener("mousemove", (event) => {
+      const col = Math.floor((event.clientX - offsetX + size) / size);
+      const row = Math.floor((event.clientY - offsetY + size) / size);
+
+      if (!mouseCell || mouseCell.x !== col || mouseCell.y !== row) {
+        if (mouseCell) {
+          trail.unshift({ ...mouseCell });
+          if (trail.length > 10) trail.length = 10;
+        }
+        mouseCell = { x: col, y: row };
+      }
+    });
+
+    window.addEventListener("mouseleave", () => {
+      mouseCell = null;
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+
+    resizeCanvas();
+    animate();
+  </script>
+</body>
 </html>
