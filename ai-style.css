@@ -1,0 +1,50 @@
+/* Claude dark mode palette, scoped to ai.html only */
+
+#ai-page {
+  background-color: #262624;
+  color: #faf9f5;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 30px;
+  border-radius: 8px;
+}
+
+#ai-page h1 {
+  color: #da7756;
+  border-bottom: 2px solid #3f3e3b;
+  padding-bottom: 10px;
+}
+
+#ai-page h2 {
+  color: #d4a27f;
+  margin-top: 30px;
+}
+
+#ai-page ol {
+  background-color: #30302e;
+  border: 1px solid #3f3e3b;
+  border-radius: 8px;
+  padding: 20px 40px;
+}
+
+#ai-page li {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+#ai-page a {
+  color: #da7756;
+  text-decoration: none;
+}
+
+#ai-page a:hover {
+  color: #eb8c6d;
+  text-decoration: underline;
+}
+
+.claude-image {
+  width: 300px;
+  height: auto;
+  margin: 10px;
+  border-radius: 8px;
+  border: 2px solid #da7756;
+}
