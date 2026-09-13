@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="An interactive look at what artificial intelligence actually is underneath the argument.">
+  <title>What AI Actually Is</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #070604;
+      --paper: #f6efe6;
+      --muted: #a3907e;
+      --ember: #ff7a2f;
+
+      --panel-bg: #111111;
+      --panel-row: #1c1c1c;
+      --panel-fill: #303030;
+      --panel-edge: #2a2a2a;
+      --panel-text: #ededed;
+      --panel-dim: #8b8b8b;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      color: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--ink);
+      cursor: crosshair;
+    }
+
+    /* ---- strands field ---- */
+
+    #strands { position: fixed; inset: 0; z-index: 0; }
+    #strands canvas { display: block; width: 100%; height: 100%; }
+
+    #fallback {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      display: none;
+      background:
+        radial-gradient(ellipse 70% 20% at 50% 50%, rgba(255, 122, 47, 0.3), transparent 70%),
+        radial-gradient(ellipse 50% 12% at 42% 52%, rgba(217, 70, 30, 0.28), transparent 70%);
+    }
+
+    /* ---- content ---- */
+
+    .stage {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      height: 100%;
+      padding: 2rem;
+      pointer-events: none;
+    }
+
+    .plate { max-width: 40ch; text-align: center; }
+
+    h1 {
+      margin: 0;
+      font-family: Newsreader, Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(2.2rem, 6.5vw, 3.6rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-shadow: 0 2px 40px rgba(0, 0, 0, 0.9);
+    }
+
+    .plate p {
+      margin: 1.5rem 0 0;
+      color: var(--muted);
+      font-family: Newsreader, Georgia, serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.7;
+      text-shadow: 0 2px 30px rgba(0, 0, 0, 0.9);
+    }
+
+    .prompt {
+      margin-top: 2.5rem;
+      color: var(--ember);
+      font-family: Inter, sans-serif;
+      font-size: 0.78rem;
+      font-style: normal;
+      animation: breathe 3.5s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.35; }
+      50% { opacity: 0.85; }
+    }
+
+    .plate.touched .prompt {
+      animation: none;
+      opacity: 0;
+      transition: opacity 600ms ease;
+    }
+
+    .exits {
+      position: fixed;
+      bottom: 1.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      white-space: nowrap;
+    }
+
+    .exits a {
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      transition: color 180ms ease, border-color 180ms ease;
+    }
+
+    .exits a:hover,
+    .exits a:focus-visible {
+      color: var(--ember);
+      border-bottom-color: currentColor;
+      outline: none;
+    }
+
+    /* ---- panel toggle ---- */
+
+    .panel-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 4;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.6rem 1rem;
+      border: 1px solid var(--panel-edge);
+      border-radius: 10px;
+      background: rgba(17, 17, 17, 0.82);
+      backdrop-filter: blur(14px);
+      color: var(--panel-text);
+      font: 500 0.85rem Inter, sans-serif;
+      cursor: pointer;
+      transition: border-color 160ms ease, color 160ms ease;
+    }
+
+    .panel-toggle:hover,
+    .panel-toggle:focus-visible {
+      border-color: var(--ember);
+      color: var(--ember);
+      outline: none;
+    }
+
+    .panel-toggle svg { width: 15px; height: 15px; }
+    .panel-toggle[aria-expanded="true"] svg { transform: rotate(45deg); }
+    .panel-toggle svg { transition: transform 220ms ease; }
+
+    /* ---- customize panel ---- */
+
+    .panel {
+      position: fixed;
+      top: 5.25rem;
+      right: 1.5rem;
+      z-index: 4;
+      width: min(760px, calc(100vw - 3rem));
+      max-height: calc(100vh - 7rem);
+      overflow-y: auto;
+      border: 1px solid var(--panel-edge);
+      border-radius: 14px;
+      background: var(--panel-bg);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+      cursor: default;
+      opacity: 0;
+      transform: translateY(-8px) scale(0.99);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .panel.open {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.4rem;
+      border-bottom: 1px solid var(--panel-edge);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      color: var(--panel-text);
+      font: 600 0.95rem Inter, sans-serif;
+    }
+
+    .reset {
+      padding: 0.35rem 0.7rem;
+      border: 1px solid var(--panel-edge);
+      border-radius: 7px;
+      background: none;
+      color: var(--panel-dim);
+      font: 500 0.78rem Inter, sans-serif;
+      cursor: pointer;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .reset:hover,
+    .reset:focus-visible {
+      color: var(--ember);
+      border-color: var(--ember);
+      outline: none;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.55rem;
+      padding: 1.1rem;
+    }
+
+    /* shared row shell */
+    .row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      height: 46px;
+      padding: 0 0.85rem;
+      border-radius: 9px;
+      background: var(--panel-row);
+      overflow: hidden;
+    }
+
+    .row-name {
+      position: relative;
+      z-index: 2;
+      color: var(--panel-text);
+      font: 400 0.84rem Inter, sans-serif;
+      white-space: nowrap;
+    }
+
+    .row-val {
+      position: relative;
+      z-index: 2;
+      color: var(--panel-text);
+      font: 400 0.84rem Inter, sans-serif;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* slider rows: fill bar + tick marks behind the label */
+    .row--slider::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--fill, 0%);
+      background: var(--panel-fill);
+      z-index: 0;
+    }
+
+    .row--slider::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: repeating-linear-gradient(
+        to right,
+        transparent 0 calc(6.25% - 1px),
+        rgba(255, 255, 255, 0.13) calc(6.25% - 1px) 6.25%
+      );
+      pointer-events: none;
+    }
+
+    .row--slider input[type="range"] {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: ew-resize;
+      -webkit-appearance: none;
+      appearance: none;
+      background: none;
+    }
+
+    .row--slider:focus-within {
+      outline: 1px solid var(--ember);
+      outline-offset: -1px;
+    }
+
+    /* color rows */
+    .swatch {
+      position: relative;
+      z-index: 2;
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      border: none;
+      border-radius: 5px;
+      background: none;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .swatch::-webkit-color-swatch-wrapper { padding: 0; }
+    .swatch::-webkit-color-swatch { border: none; border-radius: 5px; }
+    .swatch::-moz-color-swatch { border: none; border-radius: 5px; }
+
+    .hex {
+      position: relative;
+      z-index: 2;
+      width: 92px;
+      padding: 0.4rem 0.5rem;
+      border: 1px solid var(--panel-edge);
+      border-radius: 6px;
+      background: #141414;
+      color: var(--panel-text);
+      font: 400 0.8rem ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-align: center;
+    }
+
+    .hex:focus-visible { outline: 1px solid var(--ember); }
+
+    .color-group { display: flex; align-items: center; gap: 0.5rem; }
+
+    /* glass switch */
+    .switch {
+      position: relative;
+      z-index: 2;
+      width: 38px;
+      height: 21px;
+      padding: 0;
+      border: none;
+      border-radius: 999px;
+      background: #3a3a3a;
+      cursor: pointer;
+      transition: background 180ms ease;
+    }
+
+    .switch::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #9a9a9a;
+      transition: transform 180ms ease, background 180ms ease;
+    }
+
+    .switch[aria-checked="true"] { background: rgba(255, 122, 47, 0.4); }
+    .switch[aria-checked="true"]::after { transform: translateX(17px); background: var(--ember); }
+    .switch:focus-visible { outline: 1px solid var(--ember); outline-offset: 2px; }
+
+    .row.is-disabled { opacity: 0.38; }
+    .row.is-disabled input { pointer-events: none; }
+
+    @media (max-width: 860px) {
+      .panel-grid { grid-template-columns: repeat(2, 1fr); }
+      .hex { width: 78px; }
+    }
+
+    @media (max-width: 560px) {
+      .panel {
+        top: auto;
+        right: 0.75rem;
+        left: 0.75rem;
+        bottom: 0.75rem;
+        width: auto;
+        max-height: 62vh;
+      }
+      .panel-toggle { top: 1rem; right: 1rem; }
+      .panel-grid { grid-template-columns: 1fr; }
+      .exits { font-size: 0.8rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #strands { display: none; }
+      #fallback { display: block; }
+      .prompt { animation: none; opacity: 0.6; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="fallback" aria-hidden="true"></div>
+  <div id="strands" aria-hidden="true"></div>
+
+  <main class="stage">
+    <div class="plate" id="plate">
+      <h1>Underneath the argument, it is just math finding patterns.</h1>
+      <p>
+        No part of this is thinking. It is weighted signal, pulled in whatever
+        direction the input leans — including yours, right now.
+      </p>
+      <p class="prompt">Move your cursor through it</p>
+    </div>
+  </main>
+
+  <button class="panel-toggle" id="panelToggle" aria-expanded="false" aria-controls="panel">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <path d="M4 6h16M4 12h16M4 18h16"/>
+      <circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/>
+      <circle cx="15" cy="12" r="2" fill="currentColor" stroke="none"/>
+      <circle cx="8" cy="18" r="2" fill="currentColor" stroke="none"/>
+    </svg>
+    Customize
+  </button>
+
+  <section class="panel" id="panel" aria-label="Customize the strands">
+    <div class="panel-head">
+      <h2>Customize</h2>
+      <button class="reset" id="reset" type="button">Reset</button>
+    </div>
+    <div class="panel-grid" id="grid"></div>
+  </section>
+
+  <nav class="exits">
+    <a href="index.html">Portfolio</a>
+  </nav>
+
+  <script type="module">
+    // Strands, adapted from React Bits for a plain HTML page.
+    // Adds a uMouse uniform so the strands bend toward the cursor.
+
+    const MAX_STRANDS = 12;
+    const MAX_COLORS = 8;
+
+    const VERT = `#version 300 es
+    in vec2 position;
+    void main() {
+      gl_Position = vec4(position, 0.0, 1.0);
+    }
+    `;
+
+    const FRAG = `#version 300 es
+    precision highp float;
+
+    uniform float uTime;
+    uniform vec2 uResolution;
+    uniform vec3 uColors[${MAX_COLORS}];
+    uniform int uColorCount;
+    uniform int uStrandCount;
+    uniform float uSpeed;
+    uniform float uAmplitude;
+    uniform float uWaviness;
+    uniform float uThickness;
+    uniform float uGlow;
+    uniform float uTaper;
+    uniform float uSpread;
+    uniform float uHueShift;
+    uniform float uIntensity;
+    uniform float uOpacity;
+    uniform float uScale;
+    uniform float uSaturation;
+    uniform vec2 uMouse;
+    uniform float uPull;
+
+    out vec4 fragColor;
+
+    const float PI = 3.14159265;
+
+    vec3 spectrum(float t) {
+      return 0.5 + 0.5 * cos(2.0 * PI * (t + vec3(0.00, 0.33, 0.67)));
+    }
+
+    vec3 samplePalette(float t) {
+      t = fract(t);
+      float scaled = t * float(uColorCount);
+      int idx = int(floor(scaled));
+      float blend = fract(scaled);
+      int nextIdx = idx + 1;
+      if (nextIdx >= uColorCount) nextIdx = 0;
+      return mix(uColors[idx], uColors[nextIdx], blend);
+    }
+
+    vec3 strandColor(float t) {
+      if (uColorCount > 0) return samplePalette(t);
+      return spectrum(t);
+    }
+
+    void main() {
+      vec2 uv = (gl_FragCoord.xy - 0.5 * uResolution) / uResolution.y;
+      uv /= max(uScale, 0.0001);
+
+      float e = 0.06 + uIntensity * 0.94;
+      float env = pow(max(cos(uv.x * PI * 1.3), 0.0), uTaper);
+
+      float mdx = uv.x - uMouse.x;
+      float reach = exp(-mdx * mdx * 5.0);
+
+      vec3 col = vec3(0.0);
+
+      for (int i = 0; i < ${MAX_STRANDS}; i++) {
+        if (i >= uStrandCount) break;
+
+        float fi = float(i);
+        float ph = fi * 1.7 * uSpread;
+        float freq = (2.0 + fi * 0.35) * uWaviness;
+        float spd = 1.4 + fi * 1.2;
+
+        float tt = uTime * uSpeed;
+        float w = sin(uv.x * freq + tt * spd + ph) * 0.60
+                + sin(uv.x * freq * 1.1 - tt * spd * 0.7 + ph * 1.7) * 0.40;
+
+        float amp = (0.1 + 0.02 * e) * env * uAmplitude;
+        float y = w * amp;
+
+        float lag = 1.0 - fi / float(uStrandCount) * 0.55;
+        y = mix(y, uMouse.y, reach * uPull * lag);
+
+        float d = abs(uv.y - y);
+        float thick = (0.001 + 0.05 * e) * (0.35 + env) * uThickness;
+        thick *= 1.0 + reach * uPull * 0.8;
+        float g = thick / (d + thick * 0.45);
+        g = g * g;
+
+        float h = fi / float(uStrandCount) + uv.x * 0.30 + uTime * 0.04 + uHueShift;
+        col += strandColor(h) * g * env;
+      }
+
+      col *= 0.45 + 0.7 * e;
+      col *= 1.0 + reach * uPull * 0.35;
+      col = 1.0 - exp(-col * uGlow);
+
+      float gray = dot(col, vec3(0.2126, 0.7152, 0.0722));
+      col = max(mix(vec3(gray), col, uSaturation), 0.0);
+
+      float lum = max(max(col.r, col.g), col.b);
+      float alpha = clamp(lum, 0.0, 1.0) * uOpacity;
+
+      fragColor = vec4(col * uOpacity, alpha);
+    }
+    `;
+
+    const GLASS_FRAG = `#version 300 es
+    precision highp float;
+
+    uniform sampler2D uScene;
+    uniform vec2 uResolution;
+    uniform float uRadius;
+    uniform float uRefraction;
+    uniform float uDispersion;
+
+    out vec4 fragColor;
+
+    vec2 toUv(vec2 p) {
+      return p * (uResolution.y / uResolution) + 0.5;
+    }
+
+    void main() {
+      vec2 p = (gl_FragCoord.xy - 0.5 * uResolution) / uResolution.y;
+      float d = length(p);
+      float r = uRadius;
+
+      float edge = fwidth(d) * 1.5;
+      float mask = 1.0 - smoothstep(r - edge, r + edge, d);
+      if (mask <= 0.0) {
+        fragColor = vec4(0.0);
+        return;
+      }
+
+      float z = sqrt(max(r * r - d * d, 0.0)) / r;
+      float nd = d / r;
+
+      vec2 dir = d > 0.0 ? p / d : vec2(0.0);
+      float lens = smoothstep(0.85, 1.0, nd) * pow(nd, 6.0);
+      vec2 offset = -dir * lens * uRefraction * 0.15;
+      vec2 disp = -dir * lens * uDispersion * 0.012;
+
+      vec3 light;
+      light.r = texture(uScene, toUv(p + offset - disp)).r;
+      light.g = texture(uScene, toUv(p + offset)).g;
+      light.b = texture(uScene, toUv(p + offset + disp)).b;
+
+      float fres = pow(1.0 - z, 3.0);
+      vec3 rim = vec3(1.0) * fres * 0.18;
+
+      vec2 lightDir = normalize(vec2(-0.55, 0.6));
+      float spec = pow(max(dot(p / max(r, 1e-4), lightDir), 0.0), 6.0);
+      spec *= smoothstep(r, r * 0.55, d);
+
+      vec3 emissive = light + rim + vec3(spec) * 0.4;
+      float emissiveA = clamp(max(max(emissive.r, emissive.g), emissive.b), 0.0, 1.0);
+
+      float bodyA = 0.05 + fres * 0.05;
+
+      float outA = emissiveA + bodyA * (1.0 - emissiveA);
+      vec3 outRGB = emissive;
+
+      outRGB *= mask;
+      outA *= mask;
+
+      fragColor = vec4(outRGB, outA);
+    }
+    `;
+
+    // ---- defaults: the orange strands the page ships with ----
+
+    const DEFAULTS = {
+      color1: '#ff7a2f',
+      color2: '#ffb066',
+      color3: '#c2542a',
+      count: 5,
+      speed: 0.45,
+      amplitude: 1.1,
+      waviness: 0.9,
+      thickness: 0.75,
+      glow: 2.6,
+      taper: 3,
+      spread: 1,
+      hueShift: 0,
+      intensity: 0.62,
+      saturation: 1.35,
+      opacity: 1,
+      scale: 1.5,
+      glass: false,
+      refraction: 1,
+      dispersion: 1,
+      glassSize: 1
+    };
+
+    const CONFIG = { ...DEFAULTS };
+
+    // ---- control panel ----
+
+    const SLIDERS = [
+      { key: 'count',      label: 'Count',      min: 1,   max: 12, step: 1 },
+      { key: 'speed',      label: 'Speed',      min: 0,   max: 3,  step: 0.05 },
+      { key: 'amplitude',  label: 'Amplitude',  min: 0,   max: 3,  step: 0.05 },
+      { key: 'waviness',   label: 'Waviness',   min: 0,   max: 3,  step: 0.05 },
+      { key: 'thickness',  label: 'Thickness',  min: 0.1, max: 3,  step: 0.05 },
+      { key: 'glow',       label: 'Glow',       min: 0,   max: 6,  step: 0.1 },
+      { key: 'taper',      label: 'Taper',      min: 0,   max: 8,  step: 0.1 },
+      { key: 'spread',     label: 'Spread',     min: 0,   max: 3,  step: 0.05 },
+      { key: 'hueShift',   label: 'Hue Shift',  min: 0,   max: 1,  step: 0.01 },
+      { key: 'intensity',  label: 'Intensity',  min: 0,   max: 1,  step: 0.01 },
+      { key: 'saturation', label: 'Saturation', min: 0,   max: 3,  step: 0.05 },
+      { key: 'opacity',    label: 'Opacity',    min: 0,   max: 1,  step: 0.01 },
+      { key: 'scale',      label: 'Scale',      min: 0.2, max: 4,  step: 0.05 }
+    ];
+
+    const GLASS_SLIDERS = [
+      { key: 'refraction', label: 'Refraction', min: 0,   max: 3, step: 0.05 },
+      { key: 'dispersion', label: 'Dispersion', min: 0,   max: 3, step: 0.05 },
+      { key: 'glassSize',  label: 'Glass Size', min: 0.2, max: 2, step: 0.05 }
+    ];
+
+    const grid = document.getElementById('grid');
+    const fmt = (n) => String(Math.round(n * 100) / 100);
+
+    function makeColorRow(key, label) {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `
+        <span class="row-name">${label}</span>
+        <span class="color-group">
+          <input type="color" class="swatch" value="${CONFIG[key]}" aria-label="${label} swatch">
+          <input type="text" class="hex" value="${CONFIG[key]}" aria-label="${label} hex value" spellcheck="false">
+        </span>`;
+
+      const swatch = row.querySelector('.swatch');
+      const hex = row.querySelector('.hex');
+
+      swatch.addEventListener('input', () => {
+        CONFIG[key] = swatch.value;
+        hex.value = swatch.value;
+      });
+
+      hex.addEventListener('change', () => {
+        const v = hex.value.trim();
+        if (/^#[0-9a-f]{6}$/i.test(v)) {
+          CONFIG[key] = v;
+          swatch.value = v;
+        } else {
+          hex.value = CONFIG[key];
+        }
+      });
+
+      row.dataset.key = key;
+      return row;
+    }
+
+    function makeSliderRow({ key, label, min, max, step }) {
+      const row = document.createElement('div');
+      row.className = 'row row--slider';
+      row.innerHTML = `
+        <span class="row-name">${label}</span>
+        <span class="row-val">${fmt(CONFIG[key])}</span>
+        <input type="range" min="${min}" max="${max}" step="${step}" value="${CONFIG[key]}" aria-label="${label}">`;
+
+      const input = row.querySelector('input');
+      const val = row.querySelector('.row-val');
+
+      const paint = () => {
+        const pct = ((input.value - min) / (max - min)) * 100;
+        row.style.setProperty('--fill', pct + '%');
+        val.textContent = fmt(parseFloat(input.value));
+      };
+
+      input.addEventListener('input', () => {
+        CONFIG[key] = parseFloat(input.value);
+        paint();
+      });
+
+      paint();
+      row.dataset.key = key;
+      return row;
+    }
+
+    function makeGlassRow() {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `
+        <span class="row-name">Glass Ball</span>
+        <button type="button" class="switch" role="switch" aria-checked="false" aria-label="Glass Ball"></button>`;
+
+      const sw = row.querySelector('.switch');
+      sw.addEventListener('click', () => {
+        CONFIG.glass = !CONFIG.glass;
+        sw.setAttribute('aria-checked', String(CONFIG.glass));
+        syncGlassRows();
+      });
+
+      row.dataset.key = 'glass';
+      return row;
+    }
+
+    [
+      makeColorRow('color1', 'Color 1'),
+      makeColorRow('color2', 'Color 2'),
+      makeColorRow('color3', 'Color 3'),
+      ...SLIDERS.map(makeSliderRow),
+      makeGlassRow(),
+      ...GLASS_SLIDERS.map(makeSliderRow)
+    ].forEach((row) => grid.appendChild(row));
+
+    function syncGlassRows() {
+      GLASS_SLIDERS.forEach(({ key }) => {
+        const row = grid.querySelector(`[data-key="${key}"]`);
+        row.classList.toggle('is-disabled', !CONFIG.glass);
+      });
+    }
+    syncGlassRows();
+
+    // reset restores every control to the page's shipped look
+    document.getElementById('reset').addEventListener('click', () => {
+      Object.assign(CONFIG, DEFAULTS);
+
+      grid.querySelectorAll('.row').forEach((row) => {
+        const key = row.dataset.key;
+        const range = row.querySelector('input[type="range"]');
+        const swatch = row.querySelector('.swatch');
+        const hex = row.querySelector('.hex');
+        const sw = row.querySelector('.switch');
+
+        if (range) {
+          range.value = CONFIG[key];
+          range.dispatchEvent(new Event('input'));
+        }
+        if (swatch) { swatch.value = CONFIG[key]; hex.value = CONFIG[key]; }
+        if (sw) sw.setAttribute('aria-checked', String(CONFIG.glass));
+      });
+
+      syncGlassRows();
+    });
+
+    const panel = document.getElementById('panel');
+    const toggle = document.getElementById('panelToggle');
+
+    toggle.addEventListener('click', () => {
+      const open = panel.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && panel.classList.contains('open')) {
+        panel.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.focus();
+      }
+    });
+
+    // ---- render ----
+
+    const container = document.getElementById('strands');
+    const fallback = document.getElementById('fallback');
+    const plate = document.getElementById('plate');
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReduced) {
+      fallback.style.display = 'block';
+    } else {
+      try {
+        const { Renderer, Program, Mesh, Color, Triangle, RenderTarget } =
+          await import('https://cdn.jsdelivr.net/npm/ogl@1.0.11/+esm');
+
+        const buildPalette = () => {
+          const filled = [CONFIG.color1, CONFIG.color2, CONFIG.color3];
+          const padded = [];
+          for (let i = 0; i < MAX_COLORS; i++) {
+            const c = new Color(filled[i] ?? filled[filled.length - 1]);
+            padded.push([c.r, c.g, c.b]);
+          }
+          return padded;
+        };
+
+        const renderer = new Renderer({ alpha: true, premultipliedAlpha: true, antialias: true });
+        const gl = renderer.gl;
+        gl.clearColor(0, 0, 0, 0);
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+        gl.canvas.style.backgroundColor = 'transparent';
+
+        const geometry = new Triangle(gl);
+        if (geometry.attributes.uv) delete geometry.attributes.uv;
+
+        const program = new Program(gl, {
+          vertex: VERT,
+          fragment: FRAG,
+          uniforms: {
+            uTime: { value: 0 },
+            uResolution: { value: [container.offsetWidth, container.offsetHeight] },
+            uColors: { value: buildPalette() },
+            uColorCount: { value: 3 },
+            uStrandCount: { value: CONFIG.count },
+            uSpeed: { value: CONFIG.speed },
+            uAmplitude: { value: CONFIG.amplitude },
+            uWaviness: { value: CONFIG.waviness },
+            uThickness: { value: CONFIG.thickness },
+            uGlow: { value: CONFIG.glow },
+            uTaper: { value: CONFIG.taper },
+            uSpread: { value: CONFIG.spread },
+            uHueShift: { value: CONFIG.hueShift },
+            uIntensity: { value: CONFIG.intensity },
+            uOpacity: { value: CONFIG.opacity },
+            uScale: { value: CONFIG.scale },
+            uSaturation: { value: CONFIG.saturation },
+            uMouse: { value: [0, 0] },
+            uPull: { value: 0 }
+          }
+        });
+
+        const mesh = new Mesh(gl, { geometry, program });
+
+        const renderTarget = new RenderTarget(gl, {
+          width: container.offsetWidth,
+          height: container.offsetHeight
+        });
+
+        const glassProgram = new Program(gl, {
+          vertex: VERT,
+          fragment: GLASS_FRAG,
+          uniforms: {
+            uScene: { value: renderTarget.texture },
+            uResolution: { value: [container.offsetWidth, container.offsetHeight] },
+            uRadius: { value: 0.46 * CONFIG.glassSize },
+            uRefraction: { value: CONFIG.refraction },
+            uDispersion: { value: CONFIG.dispersion }
+          }
+        });
+        const glassMesh = new Mesh(gl, { geometry, program: glassProgram });
+
+        container.appendChild(gl.canvas);
+
+        function resize() {
+          const width = container.offsetWidth;
+          const height = container.offsetHeight;
+          renderer.setSize(width, height);
+          program.uniforms.uResolution.value = [width, height];
+          renderTarget.setSize(width, height);
+          glassProgram.uniforms.uResolution.value = [width, height];
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // cursor state, smoothed so the strands trail rather than snap
+        const target = { x: 0, y: 0 };
+        const eased = { x: 0, y: 0 };
+        let targetPull = 0;
+        let easedPull = 0;
+
+        function setFromPoint(clientX, clientY) {
+          const w = window.innerWidth;
+          const h = window.innerHeight;
+          target.x = ((clientX - w / 2) / h) / CONFIG.scale;
+          target.y = (-(clientY - h / 2) / h) / CONFIG.scale;
+          targetPull = 1;
+          plate.classList.add('touched');
+        }
+
+        function onPointer(e) {
+          // don't drag the strands around while someone is using the panel
+          if (e.target.closest('.panel, .panel-toggle')) return;
+          setFromPoint(e.clientX, e.clientY);
+        }
+
+        window.addEventListener('pointermove', onPointer);
+        window.addEventListener('pointerdown', onPointer);
+        window.addEventListener('pointerleave', () => { targetPull = 0; });
+        window.addEventListener('blur', () => { targetPull = 0; });
+
+        let rafId = 0;
+        const update = (t) => {
+          rafId = requestAnimationFrame(update);
+
+          eased.x += (target.x - eased.x) * 0.07;
+          eased.y += (target.y - eased.y) * 0.07;
+          easedPull += (targetPull - easedPull) * 0.05;
+
+          const u = program.uniforms;
+          u.uTime.value = t * 0.001;
+          u.uColors.value = buildPalette();
+          u.uStrandCount.value = Math.min(Math.max(Math.round(CONFIG.count), 1), MAX_STRANDS);
+          u.uSpeed.value = CONFIG.speed;
+          u.uAmplitude.value = CONFIG.amplitude;
+          u.uWaviness.value = CONFIG.waviness;
+          u.uThickness.value = CONFIG.thickness;
+          u.uGlow.value = CONFIG.glow;
+          u.uTaper.value = CONFIG.taper;
+          u.uSpread.value = CONFIG.spread;
+          u.uHueShift.value = CONFIG.hueShift;
+          u.uIntensity.value = CONFIG.intensity;
+          u.uOpacity.value = CONFIG.opacity;
+          u.uScale.value = CONFIG.scale;
+          u.uSaturation.value = CONFIG.saturation;
+          u.uMouse.value = [eased.x, eased.y];
+          u.uPull.value = easedPull;
+
+          if (CONFIG.glass) {
+            renderer.render({ scene: mesh, target: renderTarget });
+            glassProgram.uniforms.uScene.value = renderTarget.texture;
+            glassProgram.uniforms.uRefraction.value = CONFIG.refraction;
+            glassProgram.uniforms.uDispersion.value = CONFIG.dispersion;
+            glassProgram.uniforms.uRadius.value = 0.46 * CONFIG.glassSize;
+            renderer.render({ scene: glassMesh });
+          } else {
+            renderer.render({ scene: mesh });
+          }
+        };
+        rafId = requestAnimationFrame(update);
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            cancelAnimationFrame(rafId);
+            rafId = 0;
+          } else if (!rafId) {
+            rafId = requestAnimationFrame(update);
+          }
+        });
+      } catch (err) {
+        console.error('Strands failed to start:', err);
+        fallback.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
