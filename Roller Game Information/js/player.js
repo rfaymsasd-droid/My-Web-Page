@@ -54,12 +54,17 @@ Player.update = function () {
   } else {
     if (Player.vy > 0) {
       Player.onGround = true;
-    }
+      Player.vy = 0;
 
-    Player.vy = 0;
+      while (!Collide.hitsSolid(Player.x, Player.y + 1, CONFIG.PLAYER_SIZE, CONFIG.PLAYER_SIZE)) {
+        Player.y += 1;
+      }
+    } else {
+      Player.vy = 0;
 
-    while (!Collide.hitsSolid(Player.x, Player.y + 1, CONFIG.PLAYER_SIZE, CONFIG.PLAYER_SIZE)) {
-      Player.y += 1;
+      while (Collide.hitsSolid(Player.x, Player.y, CONFIG.PLAYER_SIZE, CONFIG.PLAYER_SIZE)) {
+        Player.y += 1;
+      }
     }
   }
 };
