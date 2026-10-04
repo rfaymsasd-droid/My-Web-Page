@@ -1,0 +1,37 @@
+body {
+  background: #000000;
+  color: #2d89d0;
+  font-family: monospace;
+  text-align: center;
+  margin: 24px;
+}
+
+h1 {
+  letter-spacing: 6px;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+canvas {
+  border: 3px solid #2d89d0;
+  background: #000000;
+  display: block;
+  margin: 0 auto;
+}
+
+#message {
+  font-size: 18px;
+  height: 24px;
+  margin-top: 16px;
+}
+
+.controls {
+  font-size: 13px;
+}
+
+body {
+  color: #2d89d0;
+  background-color: #010304;
+  font-family: 'Times New Roman', Times, serif;
+  text-align: center;
+}
