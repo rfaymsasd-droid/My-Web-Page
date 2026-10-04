@@ -8,6 +8,8 @@ var Level = {
   startY: 0
 };
 
+var DATA_PATH_PREFIX = "Roller Game Information/data";
+
 Level.loadData = function (whenDone) {
   function loadJson(path) {
     return fetch(path, { cache: "no-store" }).then(function (response) {
@@ -18,14 +20,14 @@ Level.loadData = function (whenDone) {
     });
   }
 
-  loadJson("./data/pieces.json")
+  loadJson(DATA_PATH_PREFIX + "/pieces.json")
     .then(function (piecesFile) {
       Level.pieces = piecesFile;
-      return loadJson("./data/levels.json");
+      return loadJson(DATA_PATH_PREFIX + "/levels.json");
     })
     .then(function (levelsFile) {
       if (!levelsFile || !Array.isArray(levelsFile.levels)) {
-        throw new Error("data/levels.json does not contain a levels array");
+        throw new Error(DATA_PATH_PREFIX + "/levels.json does not contain a levels array");
       }
       Level.levels = levelsFile.levels;
       whenDone();
